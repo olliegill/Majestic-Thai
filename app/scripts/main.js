@@ -4,18 +4,36 @@
 var Food = Backbone.Model.extend({
   defaults: {
     item: "",
-    price: "",
+    price: 0,
     description: "",
     //isCheckoutOut: false
   },
-  firebase: new Backbone.Firebase("https://amber-inferno-7725.firebaseio.com/food")
+  firebase: new Backbone.Firebase("https://amber-inferno-7725.firebaseio.com/food"),
+
+toJSON: function(){
+  var attrs = _.clone(this.attributes);
+  attrs.price = '£' + this.get('price').toFixed(2);
+  return attrs;
+}
 });
 
 var Order = Backbone.Model.extend({
   firebase: new Backbone.Firebase("https://amber-inferno-7725.firebaseio.com/orders"),
    defaults: {
      lineItems: [],
-     price: ""
+     price: 0
+   },
+
+   totalPrice: function(){
+     return _.reduce(this.get('lineItems'), function(total, i){
+       return total + i.get('price');
+     }, 0);
+   },
+
+   toJSON: function(){
+     var attrs = _.clone(this.attributes);
+     attrs.price = '£' + this.totalPrice().toFixed(2);
+     return attrs;
    }
 });
 
@@ -41,12 +59,15 @@ var FoodView = Backbone.View.extend({
   },
 
   orderFood: function(){
-    console.log(this.currentOrder);
+    // console.log(this.currentOrder);
     var lineItems = this.currentOrder.get('lineItems');
-    lineItems.push(this.model.get("item"));
+    // lineItems.push(this.model.get("item"));
+    // lineItems.push(this.model.get("price"));
+    lineItems.push(this.model);
+    this.currentOrder.unset("lineItems", {silent: true}); // I have to do this for the change event to fire
     this.currentOrder.set('lineItems', lineItems);  //look here
-    this.currentOrder.set('price', '20');
-    console.log(this.currentOrder);
+    // this.currentOrder.set('price', this.price); // moved this to the model
+//    console.log(this.currentOrder);
   },
 
   deleteFood: function(){
@@ -54,7 +75,8 @@ var FoodView = Backbone.View.extend({
   },
 
   render: function(){
-    this.$el.html(this.template(this.model.attributes));
+    this.$el.html(this.template(this.model.toJSON())); //look up toJSON
+
   }
 
 });
@@ -131,19 +153,22 @@ var CreateOrderView = Backbone.View.extend({
   },
 
   render: function(){
-    console.log("Create order");
-  var items;
- var eachItem = _.each(this.model.get("lineItems"), function(item){
-    items += "<li>"+item+"</li>";
- });
- this.model.set("itemList", items);
-    this.$el.html(this.template(this.model.attributes));
-
+    //  console.log("Create order");
+    // var items;
+    // var eachItem = _.each(this.model.get("lineItems"), function(item){
+    //   items += "<li>"+item+"</li>";
+    // });
+    // this.model.set("itemList", items);
+    this.$el.html(this.template(this.model.toJSON()));
+    _.each(this.model.get('lineItems'), function(item){
+      this.$('.line-items').append('<li>' + item.get('item') + ': ' + item.get('price') + '</li>');
+    }.bind(this));  //look into this
   }
 });
 
 $(document).ready(function(){
   var items = new FoodCollection();
+  window.items = items;
 
   var order = new Order({
 
