@@ -13,7 +13,10 @@ var Food = Backbone.Model.extend({
 
 var Order = Backbone.Model.extend({
   firebase: new Backbone.Firebase("https://amber-inferno-7725.firebaseio.com/orders"),
-
+   defaults: {
+     lineItems: [],
+     price: ""
+   }
 });
 
 var FoodCollection = Backbone.Firebase.Collection.extend({
@@ -22,11 +25,14 @@ var FoodCollection = Backbone.Firebase.Collection.extend({
 });
 
 var FoodView = Backbone.View.extend({
-  tagName: 'li',               //turn below into a script in html.
-  template: _.template('<%= item %>: <%= price %>: <%= description %><button class="order">ORDER</button><button class="delete">DELETE</button>'),
+  tagName: 'li',
+  className: 'menu-li',               //turn below into a script in html.
+  template: _.template('<span class="item-name"><%= item %></span> <br/><%= description %><button class="delete">DELETE</button><button class="order">ORDER</button><span class="item-price"><%= price %><span>'),
 
-  initialize: function(){
+  initialize: function(options){
+    options = options || {};
     this.listenTo(this.model, 'destroy', this.remove);
+    this.currentOrder = options.currentOrder;
   },
 
   events: {
@@ -35,9 +41,12 @@ var FoodView = Backbone.View.extend({
   },
 
   orderFood: function(){
-    var lineItems = this.order.get('lineItems');
-    lineItems.push(this.model);
-    this.order.set('lineItems', lineItems);
+    console.log(this.currentOrder);
+    var lineItems = this.currentOrder.get('lineItems');
+    lineItems.push(this.model.get("item"));
+    this.currentOrder.set('lineItems', lineItems);  //look here
+    this.currentOrder.set('price', '20');
+    console.log(this.currentOrder);
   },
 
   deleteFood: function(){
@@ -60,6 +69,7 @@ var MenuListView = Backbone.View.extend({
     this.$container.append(this.el);
     this.listenTo(this.collection, 'sync', this.render);
     this.listenTo(this.collection, 'add', this.renderChild);
+    this.currentOrder = options.currentOrder;
   },
 
   render: function(){
@@ -68,9 +78,10 @@ var MenuListView = Backbone.View.extend({
   },
 
   renderChild: function(food){
-    var foodView = new FoodView({model: food});
+    var foodView = new FoodView({model: food, currentOrder: this.currentOrder});
     foodView.render();
     this.$el.append(foodView.el);
+
   }
 });
 
@@ -101,7 +112,7 @@ var CreateFoodView = Backbone.View.extend({
 });
 
 var CreateOrderView = Backbone.View.extend({
-  template: _.template($('#templates-create-food').text()),
+  template: _.template($('#templates-order-food').text()),
   //template: _.template('<%= item %>: <%= price %>'),
   tagName: 'ul',
   className: "order-list",
@@ -109,15 +120,23 @@ var CreateOrderView = Backbone.View.extend({
     type: "text"
   },
 
+
   initialize: function(options){
     options = options || {};
     this.$container = options.$container;
-
+    //this.model.attributes.lineItems;
     this.$container.append(this.el);
     this.listenTo(this.model, 'change', this.render);
+    this.render();
   },
 
   render: function(){
+    console.log("Create order");
+  var items;
+ var eachItem = _.each(this.model.get("lineItems"), function(item){
+    items += "<li>"+item+"</li>";
+ });
+ this.model.set("itemList", items);
     this.$el.html(this.template(this.model.attributes));
 
   }
@@ -135,7 +154,8 @@ $(document).ready(function(){
 
   var menuListView = new MenuListView({
     $container: $('.menu'),
-    collection: items
+    collection: items,
+    currentOrder: order
   });
 
   var orderView = new CreateOrderView({
