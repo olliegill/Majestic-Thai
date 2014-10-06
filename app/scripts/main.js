@@ -161,7 +161,7 @@ var CreateOrderView = Backbone.View.extend({
     // this.model.set("itemList", items);
     this.$el.html(this.template(this.model.toJSON()));
     _.each(this.model.get('lineItems'), function(item){
-      this.$('.line-items').append('<li>' + item.get('item') + ': ' + item.get('price') + '</li>');
+      this.$('.line-items').append('<li>' + item.get('item') + ': ' + item.get('price') + '<button>X</button>' + '</li>');
     }.bind(this));  //look into this
   }
 });

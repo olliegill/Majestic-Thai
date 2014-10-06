@@ -28,6 +28,7 @@
       <div class="header">
         <!--<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLkCz0vuO0sunX0AoKplzmQP8gCNeNyD3iHnlODOxicHYu5gO2Ug">-->
         <h1>MAJESTIC THAI</h1>
+        <div class="header-line"></div>
       </div>
     </header>
 
@@ -51,21 +52,29 @@
 
      </div>
 
+     <button class="purchase">PURCHASE</button>
+
       <!-- <%= itemList %> -->
       <script type="text/template" id="templates-order-food">
        <h1>Current order</h1>
        <ul class="line-items"></ul>
-       <h2>Total:</h2><%= price %>
+       <h2>Total:</h2><h2 class="grand-total"><%= price %></h2>
 
       </script>
 
       <div class="footer">
         <ul class="footer-links">
-          <li class="brandico-facebook-rect"></li>
-          <li class="brandico-twitter-bird"></li>
-          <li class="brandico-googleplus-rect"></li>
-          <li class="brandico-instagram"></li>
+          <a href="https://www.facebook.com/"><li class="brandico-facebook-rect"></li></a>
+          <a href="https://twitter.com/?lang=en"><li class="brandico-twitter-bird"></li></a>
+          <a href="https://plus.google.com/"><li class="brandico-googleplus-rect"></li></a>
+          <a href="https://instagram.com/"><li class="brandico-instagram"></li></a>
         </ul>
+
+
+        <input class="login-name" type="text" placeholder="Admin user">
+        <input class="login-pass" type="password" placeholder="Password">
+        <button class="login">Log in</button>
+      
       </div>
     </div>
     <!-- build:js scripts/vendor.js -->

@@ -23,6 +23,15 @@ body {
   width: 100%;
   height: 200px;
   text-align: center;
+  transition-duration: 2s;
+  transition-timing-function: ease-out;
+}
+
+.header:hover h1 {
+  color: white;
+  transition-duration: 2s;
+  transition-timing-function: ease-out;
+
 }
 
 .header img {
@@ -32,9 +41,34 @@ body {
 .header h1 {
   display: inline-block;
   font-size: 80px;
+  font-family: "Big Caslon", "Book Antiqua", "Palatino Linotype", Georgia, serif;
   margin: 0;
-  padding: 40px 0;
+  padding: 40px 0 0;
+  transition-duration: 2s;
+  transition-timing-function: ease-out;
 }
+
+.header-line {
+  top: 120px;
+  left: 330px;;
+  height: 3px;
+  width: 5px;
+  //outline: solid blue 1px;
+  display: inline-block;
+  position: absolute;
+  margin: 0 auto;
+  transition-duration: 1.5s;
+  transition-timing-function: ease-out;
+}
+
+.header:hover .header-line {
+  width: 673px;
+  background-color: white;
+  transition-duration: 1.5s;
+  transition-timing-function: ease-out;
+}
+
+
 
 .blurb {
   margin: 0 auto;
@@ -67,9 +101,9 @@ body {
 
 .menu h3 {
   margin: 24px 0 0 0;
-  font-size: 24px;
+  font-size: 34px;
   display: inline-block;
-  border-bottom: solid grey 2px;
+//  border-bottom: solid grey 2px;
 }
 
 .food-list {
@@ -81,8 +115,12 @@ body {
 .menu-li {
   //outline: solid pink 1px;
   list-style-type: none;
-  padding-bottom: 10px;
+  padding:6px 0 10px;
   border-bottom: solid grey 2px;
+}
+
+.menu-li:hover{
+  background: #968788;
 }
 
 .menu-li .item-price {
@@ -111,6 +149,7 @@ body {
   border: inset;
 }
 
+
 .delete {
   visibility: hidden;
   position: relative;
@@ -129,7 +168,7 @@ body {
 
 .order-list h1 {
   display: inline-block;
-  border-bottom: solid grey 2px;
+  //border-bottom: solid grey 2px;
   margin: 15px 0;
 }
 
@@ -138,6 +177,25 @@ body {
 .order-list li {
   list-style-type: none;
 
+}
+
+.line-items {
+  padding: 0;
+}
+
+.line-items li {
+  width: 380px;
+  display: inline-block;
+  padding-bottom: 10px;
+}
+
+.line-items li button {
+  float: right;
+}
+
+.purchase {
+  width: 250px;
+  margin: 20px 0 0 130px;
 }
 
 .footer{
@@ -150,11 +208,42 @@ body {
 
 .footer-links {
   display: inline-block;
-  outline: solid red 1px;
-  margin: 0 auto;
+  margin: 10px 0 0 42%;
 }
 
 .footer-links li {
   display: inline-block;
+  margin-left: 10px;
+  height: 30px;
+  width: 30px;
+  color: #333333;
+}
 
+.footer-links li:hover {
+  transition-duration: 2s;
+  color: white;
+}
+
+.login {
+  float: right;
+  margin: 8px 10px 0;
+  background-color: #333333;
+  outline: none;
+  border: none;
+  color: black;
+}
+
+.login-name {
+  margin-left: 117px;
+  background-color: #333333;
+  outline: none;
+  border: none;
+  color: black;
+}
+
+.login-pass {
+  background-color: #333333;
+  outline: none;
+  border: none;
+  color: black;
 }
